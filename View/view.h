@@ -14,8 +14,10 @@ class View : public QMainWindow {
 
  private:
   Model* model_;
-  QSpinBox* spin_box_;
-  QListWidget* list_widget_;
+  QSpinBox* count_;
+  QListWidget* view_;
+  QWidget* question_view_;
+
   QGridLayout* grid_layout_;
 };
 
