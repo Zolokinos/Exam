@@ -6,6 +6,8 @@
 #include <QListWidget>
 #include <QGridLayout>
 #include <QGroupBox>
+#include <QString>
+#include <QObject>
 
 #include "Model/model.h"
 
@@ -13,8 +15,8 @@ class View : public QMainWindow {
  public:
   View();
   void SetWidgets();
-  void SetGroupBox();
-  void FullSetGroupBox();
+  void SetView();
+  void FullSetView(int num = -1, const QString& string = QString(QMainWindow::tr("")));
 
  private:
   Model* model_;

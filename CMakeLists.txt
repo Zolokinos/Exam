@@ -15,8 +15,8 @@ if (NOT CMAKE_PREFIX_PATH)
 endif ()
 
 set(QT_VERSION 6)
-set(REQUIRED_LIBS Widgets Gui)
-set(REQUIRED_LIBS_QUALIFIED Qt6::Widgets Qt6::Gui)
+set(REQUIRED_LIBS Widgets Gui Core)
+set(REQUIRED_LIBS_QUALIFIED Qt6::Widgets Qt6::Gui Qt6::Core)
 find_package(Qt${QT_VERSION} COMPONENTS ${REQUIRED_LIBS} REQUIRED)
 
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -Wextra -O0")
@@ -32,7 +32,8 @@ set(Model
 set(View
         View/view.cpp
         View/view.h
-        View/question_view.cpp View/question_view.h)
+        View/question_view.cpp
+        View/question_view.h)
 
 set(SOURCES main.cpp ${Controller} ${Model} ${View})
 
