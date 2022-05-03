@@ -1,4 +1,5 @@
 #include <QInputEvent>
+#include <iostream>
 #include "controller.h"
 Controller::Controller() :
     view_(new View) {
@@ -19,6 +20,6 @@ void Controller::ConnectCount() {
 void Controller::ConnectView() {
   // connect(view_, &View::QTableWidgetCellClicked, view_, &View::CastQuestionView);
   connect(view_, &View::QTableWidgetCellDoubleClicked, this, [&] (int num) {
-    view_->CastQuestionView(num);
+    std::cout << num << std::endl;
   });
 }

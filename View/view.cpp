@@ -27,6 +27,10 @@ void View::SetCount() {
 
 void View::SetView(int num) {
   grid_layout_->addWidget(view_, 1, 0);
+  connect(view_, &QTableWidget::cellClicked, this, &View::QTableWidgetCellClicked);
+  connect(view_, &QTableWidget::cellDoubleClicked, this, &View::QTableWidgetCellDoubleClicked);
+  view_->setEditTriggers(QAbstractItemView::NoEditTriggers);
+  view_->setSelectionMode(QAbstractItemView::NoSelection);
   FullSetView(num);
 }
 
@@ -48,9 +52,6 @@ void View::FullSetView(int num) {
     QTableWidgetItem* newItem = new QTableWidgetItem(tr("%1").arg(i + 1));
     newItem->setBackground(Qt::white);
     view_->setItem(i, 0, newItem);
-    connect(view_, &QTableWidget::cellClicked, this, &View::QTableWidgetCellClicked);
-    connect(view_, &QTableWidget::cellDoubleClicked, this, &View::QTableWidgetCellDoubleClicked);
   }
-  // view_->setSelectionMode(QAbstractItemView::NoSelection);
 }
 
