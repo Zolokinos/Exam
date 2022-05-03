@@ -10,47 +10,68 @@ View::View() :
     count_(new QSpinBox(this)),
     central_(new QWidget(this)),
     view_(new QTableWidget(this)),
-    grid_layout_(new QGridLayout),
+    left_part_(new QVBoxLayout()),
+    right_part_(new QVBoxLayout()),
+    linked_parts_(new QHBoxLayout()),
     question_view_(new QGroupBox(this)),
-    question_view_layout(new QHBoxLayout(question_view_)) {
+    question_view_layout(new QVBoxLayout(question_view_)) {
   show();
-  central_->setLayout(grid_layout_);
+  setGeometry(650, 300, 400, 300);
+  central_->setLayout(linked_parts_);
+  linked_parts_->addLayout(left_part_, 4);
+  linked_parts_->addLayout(right_part_, 6);
   setCentralWidget(central_);
   SetWidgets();
-  grid_layout_->addWidget(count_, 0, 0);
 }
 
 void View::SetWidgets() {
   SetCount();
-  SetQuestionView();
   SetView();
+  SetQuestionView();
 }
 
 void View::SetQuestionView() {
-  grid_layout_->addWidget(question_view_, 1, 1);
+  right_part_->addWidget(question_view_);
   question_view_->setLayout(question_view_layout);
-  FullSetQuestionView();
+  number_ = new QLabel(question_view_);
+  number_->setAlignment(Qt::AlignCenter);
+  name_ = new QLabel(question_view_);
+  name_->setWordWrap(true);
+  name_edit_ = new QLineEdit(question_view_);
+  name_edit_->setDisabled(true);
+  status_ = new QComboBox(question_view_);
+  status_->addItems(std::initializer_list<QString> {
+      QMainWindow::tr("Не просматривался"),
+      QMainWindow::tr("Не выучен"),
+      QMainWindow::tr("Выучен")});
+  question_view_layout->addWidget(number_);
+  question_view_layout->addWidget(name_);
+  question_view_layout->addWidget(name_edit_);
+  question_view_layout->addWidget(status_);
+  connect(name_edit_, &QLineEdit::textChanged, this, &View::NameChanged);
 }
 
-void View::FullSetQuestionView(int num, const QString& string) {
-  QLabel* number = new QLabel(QMainWindow::tr("%1").arg(num), question_view_);
-  QLabel* name = new QLabel(QMainWindow::tr("%1").arg(num) + QMainWindow::tr("Билет"), question_view_);
-  QLineEdit* name_edit = new QLineEdit(QMainWindow::tr("%1").arg(num) + QMainWindow::tr("Билет"), question_view_);
-  QComboBox* status = new QComboBox(question_view_);
-  status->addItems(std::initializer_list<QString> {QMainWindow::tr("Не просматривался"), QMainWindow::tr("Не выучен"), QMainWindow::tr("Выучен")});
+void View::FullSetQuestionView(int num, const QString& name_ticket) {
+  number_->show();
+  number_->setText(QMainWindow::tr("%1").arg(num + 1));
+  name_->setText(name_ticket);
+  name_edit_->setDisabled(false);
+  name_edit_->setText(name_ticket);
 }
 
 void View::SetCount() {
-  grid_layout_->addWidget(count_, 0, 0);
+  left_part_->addWidget(count_);
   connect(count_, &QSpinBox::valueChanged, this, &View::ValueChanged);
 }
 
 void View::SetView(int num) {
-  grid_layout_->addWidget(view_, 1, 0);
+  left_part_->addWidget(view_);
   connect(view_, &QTableWidget::cellClicked, this, &View::QTableWidgetCellClicked);
   connect(view_, &QTableWidget::cellDoubleClicked, this, &View::QTableWidgetCellDoubleClicked);
   view_->setEditTriggers(QAbstractItemView::NoEditTriggers);
   view_->setSelectionMode(QAbstractItemView::NoSelection);
+  view_->verticalHeader()->hide();
+  view_->horizontalHeader()->hide();
   FullSetView(num);
 }
 
@@ -64,14 +85,34 @@ void View::CastView(int num, int) {
 }
 
 void View::FullSetView(int num) {
-  view_->verticalHeader()->hide();
-  view_->horizontalHeader()->hide();
   view_->setColumnCount(1);
   view_->setRowCount(num);
   for (int i = 0; i < num; ++i) {
-    QTableWidgetItem* newItem = new QTableWidgetItem(tr("%1").arg(i + 1));
+    QTableWidgetItem* newItem = new QTableWidgetItem(QMainWindow::tr("Билет №") + QMainWindow::tr("%1").arg(i + 1));
     newItem->setBackground(Qt::white);
     view_->setItem(i, 0, newItem);
   }
+}
+
+QString View::GetNameTicket(int num) {
+  QTableWidgetItem* item = view_->item(num, 0);
+  return item->text();
+}
+
+void View::ClearQuestionView() {
+  number_->hide();
+  name_->setText(QMainWindow::tr(""));
+  name_edit_->setText(QMainWindow::tr(""));
+  name_edit_->setDisabled(true);
+}
+
+void View::ChangeQVName(const QString& name) {
+  name_->setText(name);
+}
+
+void View::ChangeVName(const QString& name) {
+  int num = number_->text().toInt();
+  --num;
+  view_->item(num, 0)->setText(name);
 }
 

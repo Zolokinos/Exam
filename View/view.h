@@ -7,6 +7,8 @@
 #include <QSpinBox>
 #include <QListWidget>
 #include <QGridLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QGroupBox>
 #include <QString>
 #include <QObject>
@@ -14,6 +16,8 @@
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QColor>
+#include <QLabel>
+#include <QComboBox>
 
 #include "Model/model.h"
 
@@ -23,16 +27,21 @@ class View : public QMainWindow {
   View();
   void SetWidgets();
   void SetQuestionView();
-  void FullSetQuestionView(int num = -1, const QString& string = QString(QMainWindow::tr("")));
+  void FullSetQuestionView(int num = -1, const QString& name_ticket = QString(QMainWindow::tr("")));
   void SetCount();
   void SetView(int num = 0);
   void FullSetView(int num = 0);
   void CastView(int num, int non_num = 0);
+  QString GetNameTicket(int num = 0);
+  void ClearQuestionView();
+  void ChangeQVName(const QString& name);
+  void ChangeVName(const QString& name);
 
  signals:
   void QTableWidgetCellClicked(int row, int = 0);
   void QTableWidgetCellDoubleClicked(int row, int = 0);
   void ValueChanged(int value);
+  void NameChanged(const QString& name);
 
  private:
   Model* model_;
@@ -40,10 +49,16 @@ class View : public QMainWindow {
   QWidget* central_;
 
   QTableWidget* view_;
-  QGridLayout* grid_layout_;
-  QGroupBox* question_view_;
+  QVBoxLayout* left_part_;
+  QVBoxLayout* right_part_;
+  QHBoxLayout* linked_parts_;
 
-  QHBoxLayout* question_view_layout;
+  QGroupBox* question_view_;
+  QVBoxLayout* question_view_layout;
+  QLabel* number_{};
+  QLabel* name_{};
+  QLineEdit* name_edit_{};
+  QComboBox* status_{};
 };
 
 #endif //EXAM_VIEW_VIEW_H__

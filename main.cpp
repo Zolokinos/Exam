@@ -7,4 +7,4 @@
     Controller controller;
 
     return QApplication::exec();
-  }
+}
