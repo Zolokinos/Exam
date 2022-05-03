@@ -31,9 +31,7 @@ set(Model
 
 set(View
         View/view.cpp
-        View/view.h
-        View/question_view.cpp
-        View/question_view.h)
+        View/view.h)
 
 set(SOURCES main.cpp ${Controller} ${Model} ${View})
 
