@@ -15,6 +15,7 @@ class Controller : public QWidget {
   void ConnectQuestionView();
   void ConnectButtons();
   void ConnectModel();
+  void ConnectBars();
 
  public slots:
 

@@ -19,6 +19,7 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QPushButton>
+#include <QProgressBar>
 
 #include "Model/model.h"
 
@@ -40,6 +41,7 @@ class View : public QMainWindow {
   void ChangeVName(const QString& name);
   void ChangeCheckStatus(int num);
   QString InitialText(int num);
+  void SetBars();
 
  signals:
   void QTableWidgetCellClicked(int row, int = 0);
@@ -53,6 +55,7 @@ class View : public QMainWindow {
 
  public slots:
   void HardCastView();
+  void SetBar(int num);
   void ModelPush(int num);
   void PreviousActivate();
   void NextCall();
@@ -78,6 +81,8 @@ class View : public QMainWindow {
   QPushButton* next_question_;
   QPushButton* previous_question_;
   QHBoxLayout* buttons_link_;
+  QProgressBar* total_progress_;
+  QProgressBar* green_progress_;
 };
 
 #endif //EXAM_VIEW_VIEW_H__

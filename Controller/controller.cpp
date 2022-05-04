@@ -12,6 +12,7 @@ void Controller::Connect() {
   ConnectQuestionView();
   ConnectButtons();
   ConnectModel();
+  ConnectBars();
 }
 
 void Controller::ConnectCount() {
@@ -54,4 +55,8 @@ void Controller::ConnectModel() {
   connect(view_, &View::ValueChanged, view_, &View::SetFormated);
   connect(view_, &View::QTableWidgetCellClicked, view_, &View::ModelPush);
   connect(view_, &View::QTableWidgetCellChanged, view_, &View::ChangeSets);
+}
+
+void Controller::ConnectBars() {
+  connect(view_, &View::ValueChanged, view_, &View::SetBar);
 }

@@ -18,6 +18,9 @@ View::View() :
     next_question_(new QPushButton(tr("Далее"), this)),
     previous_question_(new QPushButton(tr("Назад"), this)),
     buttons_link_(new QHBoxLayout()) {
+    question_view_layout(new QVBoxLayout(question_view_)),
+    total_progress_(new QProgressBar(this)),
+    green_progress_(new QProgressBar(this)) {
   show();
   move(650, 300);
   setFixedSize(400, 300);
@@ -29,6 +32,7 @@ View::View() :
 }
 
 void View::SetWidgets() {
+  SetBars();
   SetCount();
   SetView();
   SetQuestionView();
@@ -203,5 +207,19 @@ void View::ChangeSets(int num) {
   } else {
     model_->NonGreenAdd(num);
   }
+}
+
+void View::SetBars() {
+  right_part_->addWidget(total_progress_);
+  right_part_->addWidget(green_progress_);
+  total_progress_->setMinimum(0);
+  green_progress_->setMinimum(0);
+}
+
+void View::SetBar(int num) {
+  total_progress_->setMaximum(num);
+  green_progress_->setMaximum(num);
+  total_progress_->setValue(0);
+  green_progress_->setValue(0);
 }
 
