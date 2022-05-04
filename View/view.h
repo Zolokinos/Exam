@@ -27,21 +27,27 @@ class View : public QMainWindow {
   View();
   void SetWidgets();
   void SetQuestionView();
-  void FullSetQuestionView(int num = -1, const QString& name_ticket = QString(QMainWindow::tr("")));
+  void CastQuestionView(int num = -1, const QString& name_ticket = QString(QMainWindow::tr("")));
   void SetCount();
   void SetView(int num = 0);
-  void FullSetView(int num = 0);
+  void ReSetView(int num = 0);
   void CastView(int num, int non_num = 0);
   QString GetNameTicket(int num = 0);
   void ClearQuestionView();
   void ChangeQVName(const QString& name);
   void ChangeVName(const QString& name);
+  void ChangeCheckStatus(int num);
+  QString InitialText(int num);
 
  signals:
   void QTableWidgetCellClicked(int row, int = 0);
   void QTableWidgetCellDoubleClicked(int row, int = 0);
   void ValueChanged(int value);
   void NameChanged(const QString& name);
+  void StatusChanged(int num);
+
+ public slots:
+  void HardCastView();
 
  private:
   Model* model_;
