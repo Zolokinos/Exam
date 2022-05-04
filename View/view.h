@@ -18,6 +18,7 @@
 #include <QColor>
 #include <QLabel>
 #include <QComboBox>
+#include <QProgressBar>
 
 #include "Model/model.h"
 
@@ -38,6 +39,7 @@ class View : public QMainWindow {
   void ChangeVName(const QString& name);
   void ChangeCheckStatus(int num);
   QString InitialText(int num);
+  void SetBars();
 
  signals:
   void QTableWidgetCellClicked(int row, int = 0);
@@ -48,6 +50,7 @@ class View : public QMainWindow {
 
  public slots:
   void HardCastView();
+  void SetBar(int num);
 
  private:
   Model* model_;
@@ -65,6 +68,8 @@ class View : public QMainWindow {
   QLabel* name_{};
   QLineEdit* name_edit_{};
   QComboBox* status_{};
+  QProgressBar* total_progress_;
+  QProgressBar* green_progress_;
 };
 
 #endif //EXAM_VIEW_VIEW_H__

@@ -10,6 +10,7 @@ void Controller::Connect() {
   ConnectView();
   ConnectCount();
   ConnectQuestionView();
+  ConnectBars();
 }
 
 void Controller::ConnectCount() {
@@ -40,4 +41,8 @@ void Controller::ConnectView() {
   connect(view_, &View::NameChanged, this, [&] (const QString& name) {
     view_->ChangeVName(name);
   });
+}
+
+void Controller::ConnectBars() {
+  connect(view_, &View::ValueChanged, view_, &View::SetBar);
 }
