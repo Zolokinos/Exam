@@ -18,6 +18,7 @@
 #include <QColor>
 #include <QLabel>
 #include <QComboBox>
+#include <QPushButton>
 
 #include "Model/model.h"
 
@@ -33,6 +34,7 @@ class View : public QMainWindow {
   void ReSetView(int num = 0);
   void CastView(int num, int non_num = 0);
   QString GetNameTicket(int num = 0);
+  void SetButtons();
   void ClearQuestionView();
   void ChangeQVName(const QString& name);
   void ChangeVName(const QString& name);
@@ -45,9 +47,14 @@ class View : public QMainWindow {
   void ValueChanged(int value);
   void NameChanged(const QString& name);
   void StatusChanged(int num);
+  void PreviousClicked();
+  void NextClicked();
 
  public slots:
   void HardCastView();
+  void ModelPush(int num);
+  void PreviousActivate();
+  void ModelClear();
 
  private:
   Model* model_;
@@ -65,6 +72,9 @@ class View : public QMainWindow {
   QLabel* name_{};
   QLineEdit* name_edit_{};
   QComboBox* status_{};
+  QPushButton* next_question_;
+  QPushButton* previous_question_;
+  QHBoxLayout* buttons_link_;
 };
 
 #endif //EXAM_VIEW_VIEW_H__

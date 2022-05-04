@@ -4,7 +4,7 @@
 #include <QString>
 #include <iostream>
 #include "view.h"
-
+/// todo resize event
 View::View() :
     model_(new Model),
     count_(new QSpinBox(this)),
@@ -14,7 +14,10 @@ View::View() :
     right_part_(new QVBoxLayout()),
     linked_parts_(new QHBoxLayout()),
     question_view_(new QGroupBox(this)),
-    question_view_layout(new QVBoxLayout(question_view_)) {
+    question_view_layout(new QVBoxLayout(question_view_)),
+    next_question_(new QPushButton(tr("Далее"), this)),
+    previous_question_(new QPushButton(tr("Назад"), this)),
+    buttons_link_(new QHBoxLayout()) {
   show();
   move(650, 300);
   setFixedSize(400, 300);
@@ -29,6 +32,7 @@ void View::SetWidgets() {
   SetCount();
   SetView();
   SetQuestionView();
+  SetButtons();
 }
 
 void View::SetQuestionView() {
@@ -87,7 +91,6 @@ void View::CastView(int num, int) {
   } else {
     item->setBackground(QColor(37, 194, 84));
   }
-
 }
 
 void View::ReSetView(int num) {
@@ -147,5 +150,33 @@ void View::HardCastView() {
   } else {
     item->setBackground(Qt::white);
   }
+}
+
+void View::SetButtons() {
+  buttons_link_->addWidget(previous_question_, 1);
+  buttons_link_->addWidget(next_question_, 1);
+  right_part_->addLayout(buttons_link_);
+  connect(previous_question_, &QPushButton::clicked, this, &View::PreviousClicked);
+  connect(next_question_, &QPushButton::clicked, this, &View::NextClicked);
+}
+
+void View::ModelPush(int num) {
+  if (num != model_->Top()) {
+    model_->Push(num);
+  }
+}
+
+void View::PreviousActivate() {
+  int num = model_->TopPop();
+  if (num == -1) {
+    return;
+  }
+  QTableWidgetItem* item = view_->item(num, 0);
+  QString name = item->text();
+  CastQuestionView(num, name);
+}
+
+void View::ModelClear() {
+  model_->Clear();
 }
 

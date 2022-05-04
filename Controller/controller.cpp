@@ -10,6 +10,8 @@ void Controller::Connect() {
   ConnectView();
   ConnectCount();
   ConnectQuestionView();
+  ConnectButtons();
+  ConnectModel();
 }
 
 void Controller::ConnectCount() {
@@ -40,4 +42,13 @@ void Controller::ConnectView() {
   connect(view_, &View::NameChanged, this, [&] (const QString& name) {
     view_->ChangeVName(name);
   });
+}
+
+void Controller::ConnectButtons() {
+  connect(view_, &View::PreviousClicked, view_, &View::PreviousActivate);
+}
+
+void Controller::ConnectModel() {
+  connect(view_, &View::ValueChanged, view_, &View::ModelClear);
+  connect(view_, &View::QTableWidgetCellClicked, view_, &View::ModelPush);
 }
