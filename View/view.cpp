@@ -77,6 +77,7 @@ void View::SetView(int num) {
   left_part_->addWidget(view_);
   connect(view_, &QTableWidget::cellClicked, this, &View::QTableWidgetCellClicked);
   connect(view_, &QTableWidget::cellDoubleClicked, this, &View::QTableWidgetCellDoubleClicked);
+  connect(view_, &QTableWidget::cellChanged, this, &View::QTableWidgetCellChanged);
   view_->setEditTriggers(QAbstractItemView::NoEditTriggers);
   view_->setSelectionMode(QAbstractItemView::NoSelection);
   view_->verticalHeader()->hide();
@@ -105,7 +106,7 @@ void View::ReSetView(int num) {
 
 QString View::GetNameTicket(int num) {
   QTableWidgetItem* item = view_->item(num, 0);
-  return item->text();
+   return item->text();
 }
 
 void View::ClearQuestionView() {
@@ -176,7 +177,31 @@ void View::PreviousActivate() {
   CastQuestionView(num, name);
 }
 
-void View::ModelClear() {
-  model_->Clear();
+void View::NextCall() {
+  std::set<int> set = model_->NonGreenGet();
+  int size = set.size();
+  int num = model_->GetRand(size);
+  if (num == -1) {
+    return;
+  }
+
+  auto it = set.begin();
+  for (int i = 0; i < num; ++i) {
+    ++it;
+  }
+  emit QTableWidgetCellClicked(*it);
+}
+
+void View::SetFormated(int num) {
+  model_->SetFormated(num);
+}
+
+void View::ChangeSets(int num) {
+  QTableWidgetItem* item = view_->item(num, 0);
+  if (item->background().color() == QColor(37, 194, 84)) {
+    model_->GreenAdd(num);
+  } else {
+    model_->NonGreenAdd(num);
+  }
 }
 

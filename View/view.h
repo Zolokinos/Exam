@@ -49,12 +49,15 @@ class View : public QMainWindow {
   void StatusChanged(int num);
   void PreviousClicked();
   void NextClicked();
+  void QTableWidgetCellChanged(int num);
 
  public slots:
   void HardCastView();
   void ModelPush(int num);
   void PreviousActivate();
-  void ModelClear();
+  void NextCall();
+  void SetFormated(int num);
+  void ChangeSets(int num);
 
  private:
   Model* model_;

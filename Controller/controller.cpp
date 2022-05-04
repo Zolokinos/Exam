@@ -18,6 +18,7 @@ void Controller::ConnectCount() {
   connect(view_, &View::ValueChanged, this, [&] (int num) {
     view_->ClearQuestionView();
     view_->ReSetView(num);
+    view_->SetFormated(num);
   });
 }
 
@@ -46,9 +47,11 @@ void Controller::ConnectView() {
 
 void Controller::ConnectButtons() {
   connect(view_, &View::PreviousClicked, view_, &View::PreviousActivate);
+  connect(view_, &View::NextClicked, view_, &View::NextCall);
 }
 
 void Controller::ConnectModel() {
-  connect(view_, &View::ValueChanged, view_, &View::ModelClear);
+  connect(view_, &View::ValueChanged, view_, &View::SetFormated);
   connect(view_, &View::QTableWidgetCellClicked, view_, &View::ModelPush);
+  connect(view_, &View::QTableWidgetCellChanged, view_, &View::ChangeSets);
 }
