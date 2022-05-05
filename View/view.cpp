@@ -4,6 +4,7 @@
 #include <QString>
 #include <iostream>
 #include "view.h"
+
 /// todo resize event
 View::View() :
     model_(new Model),
@@ -17,8 +18,7 @@ View::View() :
     question_view_layout(new QVBoxLayout(question_view_)),
     next_question_(new QPushButton(tr("Далее"), this)),
     previous_question_(new QPushButton(tr("Назад"), this)),
-    buttons_link_(new QHBoxLayout()) {
-    question_view_layout(new QVBoxLayout(question_view_)),
+    buttons_link_(new QHBoxLayout()),
     total_progress_(new QProgressBar(this)),
     green_progress_(new QProgressBar(this)) {
   show();
@@ -91,11 +91,17 @@ void View::SetView(int num) {
 
 void View::CastView(int num, int) {
   QTableWidgetItem* item = view_->item(num, 0);
+  SetPrev(num);
   if (item->background().color() == QColor(37, 194, 84)) {
     item->setBackground(QColor(255, 242, 0));
   } else {
-    item->setBackground(QColor(37, 194, 84));
+    if (item->background().color() == QColor(255, 242, 0)) {
+      item->setBackground(QColor(37, 194, 84));
+    } else {
+      item->setBackground(QColor(37, 194, 84));
+    }
   }
+  emit CellTrulyChanged(num);
 }
 
 void View::ReSetView(int num) {
@@ -149,12 +155,26 @@ void View::HardCastView() {
   int num = number_->text().toInt() - 1;
   QTableWidgetItem* item = view_->item(num, 0);
   if (status_->currentText() == tr("Выучен")) {
+    if (item->background().color() == QColor(37, 194, 84)) {
+      return;
+    }
+    SetPrev(num);
     item->setBackground(QColor(37, 194, 84));
   } else if (status_->currentText() == tr("Не выучен")) {
+    if (item->background().color() == QColor(255, 242, 0)) {
+      return;
+    }
+    SetPrev(num);
     item->setBackground(QColor(255, 242, 0));
   } else {
+    if (item->background().color() == Qt::white) {
+      return;
+    }
+    SetPrev(num);
     item->setBackground(Qt::white);
   }
+
+  emit CellTrulyChanged(num);
 }
 
 void View::SetButtons() {
@@ -193,6 +213,7 @@ void View::NextCall() {
   for (int i = 0; i < num; ++i) {
     ++it;
   }
+
   emit QTableWidgetCellClicked(*it);
 }
 
@@ -200,13 +221,42 @@ void View::SetFormated(int num) {
   model_->SetFormated(num);
 }
 
-void View::ChangeSets(int num) {
+void View::ChangeSet(int num) {
   QTableWidgetItem* item = view_->item(num, 0);
   if (item->background().color() == QColor(37, 194, 84)) {
     model_->GreenAdd(num);
   } else {
     model_->NonGreenAdd(num);
   }
+}
+
+void View::ChangeBars(int num) {
+  QTableWidgetItem* item = view_->item(num, 0);
+    switch (model_->PrevColor()) {
+      case 0:
+        if (item->background().color() == QColor(255, 242, 0)) {
+          total_progress_->setValue(total_progress_->value() + 1);
+        } else {
+          total_progress_->setValue(total_progress_->value() + 1);
+          green_progress_->setValue(green_progress_->value() + 1);
+        }
+        break;
+      case 1:
+        if (item->background().color() == QColor(37, 194, 84)) {
+          green_progress_->setValue(green_progress_->value() + 1);
+        } else {
+          total_progress_->setValue(total_progress_->value() - 1);
+        }
+        break;
+      case 2:
+        if (item->background().color() == Qt::white) {
+          total_progress_->setValue(total_progress_->value() - 1);
+          green_progress_->setValue(green_progress_->value() - 1);
+        } else {
+          green_progress_->setValue(green_progress_->value() - 1);
+        }
+        break;
+    }
 }
 
 void View::SetBars() {
@@ -223,3 +273,18 @@ void View::SetBar(int num) {
   green_progress_->setValue(0);
 }
 
+void View::SetPrev(int num) {
+  QTableWidgetItem* item = view_->item(num, 0);
+  if (item->background().color() == QColor(37, 194, 84)) {
+    model_->PrevGreen();
+    std::cout << "PrevGreen" << std::endl;
+  } else {
+    if (item->background().color() == QColor(255, 242, 0)) {
+      model_->PrevYellow();
+      std::cout << "PrevYellow" << std::endl;
+    } else {
+      model_->PrevDefault();
+      std::cout << "PrevDefault" << std::endl;
+    }
+  }
+}

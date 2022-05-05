@@ -76,3 +76,33 @@ void Model::SetFormated(int num) {
     non_green_.insert(i);
   }
 }
+
+int Model::PrevColor() const {
+  if (is_default_) {
+    return 0;
+  } else if (is_yellow_) {
+    return 1;
+  } else if (is_green_) {
+    return 2;
+  }
+  return -1;
+}
+
+void Model::PrevDefault() {
+  is_default_ = true;
+  is_yellow_ = false;
+  is_green_ = false;
+}
+
+void Model::PrevYellow() {
+  is_default_ = false;
+  is_yellow_ = true;
+  is_green_ = false;
+}
+
+void Model::PrevGreen() {
+  is_default_ = false;
+  is_yellow_ = false;
+  is_green_ = true;
+
+}

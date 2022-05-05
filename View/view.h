@@ -42,6 +42,7 @@ class View : public QMainWindow {
   void ChangeCheckStatus(int num);
   QString InitialText(int num);
   void SetBars();
+  void SetPrev(int num);
 
  signals:
   void QTableWidgetCellClicked(int row, int = 0);
@@ -52,6 +53,10 @@ class View : public QMainWindow {
   void PreviousClicked();
   void NextClicked();
   void QTableWidgetCellChanged(int num);
+  void FromDefault(int num);
+  void FromYellow(int num);
+  void FromGreen(int num);
+  void CellTrulyChanged(int num);
 
  public slots:
   void HardCastView();
@@ -60,7 +65,8 @@ class View : public QMainWindow {
   void PreviousActivate();
   void NextCall();
   void SetFormated(int num);
-  void ChangeSets(int num);
+  void ChangeSet(int num);
+  void ChangeBars(int num);
 
  private:
   Model* model_;

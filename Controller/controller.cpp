@@ -54,9 +54,10 @@ void Controller::ConnectButtons() {
 void Controller::ConnectModel() {
   connect(view_, &View::ValueChanged, view_, &View::SetFormated);
   connect(view_, &View::QTableWidgetCellClicked, view_, &View::ModelPush);
-  connect(view_, &View::QTableWidgetCellChanged, view_, &View::ChangeSets);
+  connect(view_, &View::QTableWidgetCellChanged, view_, &View::ChangeSet);
 }
 
 void Controller::ConnectBars() {
   connect(view_, &View::ValueChanged, view_, &View::SetBar);
+  connect(view_, &View::CellTrulyChanged, view_, &View::ChangeBars);
 }
